@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pílula de Conhecimento | Primeiros Passos com Agentes de IA</title>
+  <style>
+    :root {
+      --bg: #08111f;
+      --card: #101c2f;
+      --card-2: #15243a;
+      --text: #ecf6ff;
+      --muted: #a9bbcf;
+      --cyan: #00e5ff;
+      --purple: #9b5cff;
+      --green: #7dffb2;
+      --yellow: #ffd166;
+      --danger: #ff6b6b;
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(0,229,255,.22), transparent 30%),
+        radial-gradient(circle at top right, rgba(155,92,255,.22), transparent 32%),
+        linear-gradient(135deg, #060b14, var(--bg));
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--cyan); }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 34px 20px 80px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 28px;
+    }
+
+    .hero-card, .panel, .step, .quiz-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-card {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(0,229,255,.11);
+      right: -90px;
+      top: -90px;
+      filter: blur(2px);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,229,255,.12);
+      color: var(--cyan);
+      border: 1px solid rgba(0,229,255,.28);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    h1 {
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 1.03;
+      margin: 22px 0 16px;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      font-size: clamp(24px, 4vw, 36px);
+      margin: 0 0 14px;
+      letter-spacing: -0.02em;
+    }
+
+    h3 { margin: 0 0 10px; }
+
+    p { margin: 0 0 14px; color: var(--muted); }
+
+    .highlight { color: var(--text); font-weight: 750; }
+    .accent { color: var(--cyan); }
+
+    .side-card {
+      padding: 26px;
+      background: linear-gradient(160deg, rgba(0,229,255,.16), rgba(155,92,255,.16));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 340px;
+    }
+
+    .score {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .score-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(8,17,31,.55);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .progress-bar {
+      display: flex;
+      gap: 8px;
+      margin: 20px 0;
+      justify-content: center;
+    }
+
+    .progress-step {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,.1);
+      transition: .3s ease;
+    }
+
+    .progress-step.active {
+      background: var(--cyan);
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      margin: 0 0 26px;
+      padding: 12px;
+      background: rgba(8,17,31,.78);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 999px;
+      backdrop-filter: blur(14px);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav button, .btn {
+      border: 0;
+      cursor: pointer;
+      color: var(--text);
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .nav button:hover, .btn:hover { transform: translateY(-2px); background: rgba(0,229,255,.16); }
+
+    section { margin: 26px 0; scroll-margin-top: 90px; }
+
+    .panel { padding: 28px; }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .mini-card {
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.11);
+    }
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(0,229,255,.13);
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .step {
+      padding: 18px;
+      min-height: 150px;
+      position: relative;
+    }
+
+    .step strong {
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    details {
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 18px;
+      padding: 16px 18px;
+      margin: 12px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .prompt-box {
+      background: #050a13;
+      border: 1px solid rgba(0,229,255,.22);
+      color: #dff8ff;
+      border-radius: 18px;
+      padding: 18px;
+      font-family: Consolas, Monaco, monospace;
+      overflow: auto;
+      white-space: pre-wrap;
+      margin-top: 12px;
+    }
+
+    .quiz-card {
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    .option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      margin: 10px 0;
+      padding: 13px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.11);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor: pointer;
+      transition: .15s ease;
+    }
+
+    .option:hover { background: rgba(0,229,255,.13); }
+    .option.correct { border-color: rgba(125,255,178,.8); background: rgba(125,255,178,.15); }
+    .option.wrong { border-color: rgba(255,107,107,.8); background: rgba(255,107,107,.14); }
+
+    .feedback {
+      margin-top: 10px;
+      font-weight: 700;
+      color: var(--yellow);
+      min-height: 26px;
+    }
+
+    .checklist label {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .checklist label:hover {
+      color: var(--text);
+    }
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #00e5ff;
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .checklist label.checked {
+      color: var(--green);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 34px 20px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .hero, .grid-3, .grid-2, .flow { grid-template-columns: 1fr; }
+      .nav { border-radius: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-card">
+        <span class="tag">Pílula de Conhecimento • JEDAI</span>
+        <h1>Primeiros passos com <span class="accent">Agentes de IA</span></h1>
+        <p>
+          Uma introdução prática para entender como agentes de IA podem apoiar pessoas,
+          times e processos corporativos — sem substituir o pensamento crítico e a governança.
+        </p>
+        <p class="highlight">Ideia central: a IA não tira o humano da jornada. Ela amplia nossa capacidade de perguntar melhor, analisar melhor e agir com mais clareza.</p>
+        <button class="btn" onclick="scrollToSection('intro')">Começar a pílula</button>
+      </div>
+
+      <aside class="side-card">
+        <div>
+          <h2>Jornada de 5 etapas</h2>
+          <p>Baseado no curso "Primeiros passos com Agentes de IA", esta pílula combina conceitos fundamentais com dicas práticas de aplicação.</p>
+        </div>
+        <div class="score">
+          <div class="score-row"><span>Tempo estimado</span><strong>5-7 minutos</strong></div>
+          <div class="score-row"><span>Formato</span><strong>Interativo</strong></div>
+          <div class="score-row"><span>Foco</span><strong>Aplicação prática</strong></div>
+        </div>
+      </aside>
+    </header>
+
+    <nav class="nav" aria-label="Navegação da pílula">
+      <button onclick="scrollToSection('intro')">Introdução</button>
+      <button onclick="scrollToSection('conceitos')">Conceitos</button>
+      <button onclick="scrollToSection('aplicacoes')">Aplicações</button>
+      <button onclick="scrollToSection('construir')">Como Construir</button>
+      <button onclick="scrollToSection('quiz')">Quiz</button>
+      <button onclick="scrollToSection('checklist')">Checklist</button>
+    </nav>
+
+    <section id="intro" class="panel">
+      <h2>Introdução: O que é um agente de IA?</h2>
+      <p>
+        Um agente de IA é um sistema que utiliza modelos de linguagem para interpretar uma necessidade,
+        planejar próximos passos, acessar ferramentas ou dados autorizados e entregar uma resposta ou ação.
+        Diferente de um chatbot simples, um agente pode <strong>agir com mais autonomia controlada</strong>.
+      </p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Chatbot tradicional</h3>
+          <p>Responde perguntas com base em regras, fluxos ou conhecimento limitado. Interação reativa e predefinida.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Agente de IA</h3>
+          <p>Consegue raciocinar sobre a tarefa, consultar fontes, usar ferramentas e seguir um objetivo com mais autonomia controlada.</p>
+        </div>
+      </div>
+      <details>
+        <summary>Exemplo prático no contexto corporativo</summary>
+        <p>Em vez de apenas responder "o que é receita recorrente?", um agente poderia consultar uma base autorizada, buscar a métrica correta, validar filtros, explicar o resultado e sugerir uma visualização para o time de vendas.</p>
+      </details>
+    </section>
+
+    <section id="conceitos" class="panel">
+      <h2>Conceitos Fundamentais: Como um agente trabalha</h2>
+      <p>Um bom agente não é apenas "uma IA respondendo". Ele segue uma jornada organizada e estruturada.</p>
+      <div class="flow">
+        <div class="step"><strong>1. Entende</strong><p>Lê o pedido, identifica intenção, contexto e restrições.</p></div>
+        <div class="step"><strong>2. Planeja</strong><p>Define quais passos precisa executar para chegar a uma resposta confiável.</p></div>
+        <div class="step"><strong>3. Consulta</strong><p>Usa fontes, documentos, sistemas ou bases autorizadas.</p></div>
+        <div class="step"><strong>4. Valida</strong><p>Checa coerência, riscos, permissões e qualidade da informação.</p></div>
+        <div class="step"><strong>5. Entrega</strong><p>Gera resposta, insight, ação ou recomendação com rastreabilidade.</p></div>
+      </div>
+      
+      <h3 style="margin-top: 28px;">Componentes essenciais</h3>
+      <div class="grid-3">
+        <div class="mini-card"><div class="icon">🧠</div><h3>Modelo de Linguagem</h3><p>A "inteligência" que interpreta, raciocina e gera respostas.</p></div>
+        <div class="mini-card"><div class="icon">🔧</div><h3>Ferramentas</h3><p>Funções que o agente pode invocar: buscar dados, calcular, enviar e-mails, etc.</p></div>
+        <div class="mini-card"><div class="icon">📋</div><h3>Contexto</h3><p>Informações sobre o usuário, histórico da conversa e regras de negócio.</p></div>
+      </div>
+      <details>
+        <summary>O que você precisa saber antes de começar</summary>
+        <p><strong>1.</strong> Defina claramente o problema que quer resolver.<br>
+        <strong>2.</strong> Identifique quais dados ou ferramentas o agente precisará acessar.<br>
+        <strong>3.</strong> Estabeleça regras de governança: o que ele pode e não pode fazer.<br>
+        <strong>4.</strong> Comece simples e vá iterando com base no feedback dos usuários.</p>
+      </details>
+    </section>
+
+    <section id="aplicacoes" class="panel">
+      <h2>Aplicações Reais: Onde isso pode ajudar?</h2>
+      <p>Exemplos de aplicação para times que lidam com dados, processos, atendimento e conhecimento corporativo.</p>
+      <div class="grid-3">
+        <div class="mini-card"><div class="icon">📊</div><h3>Dados e BI</h3><p>Ajudar usuários a entender métricas, montar consultas, interpretar dashboards e formular perguntas melhores.</p></div>
+        <div class="mini-card"><div class="icon">📚</div><h3>Conhecimento interno</h3><p>Buscar respostas em políticas, documentações, FAQs, manuais e materiais internos autorizados.</p></div>
+        <div class="mini-card"><div class="icon">🛠️</div><h3>Operações</h3><p>Apoiar abertura de chamados, triagem de problemas, automação de rotinas e acompanhamento de tarefas.</p></div>
+      </div>
+      
+      <div class="grid-3" style="margin-top: 16px;">
+        <div class="mini-card"><div class="icon">💬</div><h3>Atendimento</h3><p>Responder dúvidas frequentes, escalar casos complexos e manter histórico contextualizado.</p></div>
+        <div class="mini-card"><div class="icon">📝</div><h3>Produtividade</h3><p>Auxiliar na redação de e-mails, sumarização de documentos e organização de informações.</p></div>
+        <div class="mini-card"><div class="icon">🔍</div><h3>Análise</h3><p>Identificar padrões em dados, gerar insights e sugerir próximos passos investigativos.</p></div>
+      </div>
+      
+      <details>
+        <summary>O ponto mais importante: agente bom precisa de contexto bom</summary>
+        <p>Quanto melhor forem as fontes, regras, permissões, métricas e critérios de qualidade, melhor será a atuação do agente. <strong>IA sem governança pode parecer produtiva, mas gerar decisões frágeis.</strong></p>
+      </details>
+    </section>
+
+    <section id="construir" class="panel">
+      <h2>Como Construir: Prompts efetivos</h2>
+      <p>Uma forma prática de pedir ajuda para uma IA é informar papel, contexto, objetivo, restrições e formato esperado.</p>
+      
+      <h3>Framework: P-C-O-R-F</h3>
+      <div class="grid-3">
+        <div class="mini-card"><strong style="color: var(--cyan);">P</strong> - Papel<br><span style="color: var(--muted); font-size: 14px;">Quem você quer que a IA seja?</span></div>
+        <div class="mini-card"><strong style="color: var(--cyan);">C</strong> - Contexto<br><span style="color: var(--muted); font-size: 14px;">Qual a situação atual?</span></div>
+        <div class="mini-card"><strong style="color: var(--cyan);">O</strong> - Objetivo<br><span style="color: var(--muted); font-size: 14px;">O que você quer alcançar?</span></div>
+        <div class="mini-card"><strong style="color: var(--cyan);">R</strong> - Restrições<br><span style="color: var(--muted); font-size: 14px;">O que deve ser evitado?</span></div>
+        <div class="mini-card"><strong style="color: var(--cyan);">F</strong> - Formato<br><span style="color: var(--muted); font-size: 14px;">Como você quer a resposta?</span></div>
+      </div>
+      
+      <h3 style="margin-top: 28px;">Exemplo de prompt estruturado</h3>
+      <div class="prompt-box">Papel: Atue como um assistente de dados para usuários de negócio.
+
+Contexto: Preciso entender um indicador de vendas em um dashboard que mostra queda de 15% no último trimestre.
+
+Objetivo: Explique a métrica de forma simples, indique possíveis causas de variação e sugira 3 perguntas para investigar melhor.
+
+Restrições: Não invente dados; sinalize quando precisar consultar uma fonte oficial; evite termos técnicos complexos.
+
+Formato: Responda em tópicos curtos, com linguagem clara para pessoas não técnicas. Inclua uma seção "Próximos passos sugeridos".</div>
+
+      <details>
+        <summary>Dicas extras de quem já usa no dia a dia</summary>
+        <p><strong>Seja específico:</strong> "Me ajude a melhorar este e-mail" é vago. "Me ajude a deixar este e-mail mais direto e profissional, mantendo um tom cordial" é melhor.<br><br>
+        <strong>Forneça exemplos:</strong> Se quiser um formato específico, mostre um exemplo.<br><br>
+        <strong>Itere:</strong> A primeira resposta raramente é perfeita. Refine com feedback: "Agora mais formal" ou "Inclua dados do último ano".<br><br>
+        <strong>Valide sempre:</strong> Verifique dados importantes em fontes oficiais antes de tomar decisões.</p>
+      </details>
+    </section>
+
+    <section id="quiz" class="panel">
+      <h2>Quiz: Teste seus conhecimentos</h2>
+      <p>Escolha a melhor resposta para cada pergunta.</p>
+      
+      <div class="quiz-card">
+        <h3>1. Qual é a principal diferença entre um chatbot simples e um agente de IA?</h3>
+        <button class="option" onclick="answer(this, false, 'feedback1')">O agente sempre substitui uma pessoa.</button>
+        <button class="option" onclick="answer(this, true, 'feedback1')">O agente pode planejar etapas, consultar ferramentas e executar ações controladas.</button>
+        <button class="option" onclick="answer(this, false, 'feedback1')">O agente não precisa de dados confiáveis.</button>
+        <div id="feedback1" class="feedback"></div>
+      </div>
+
+      <div class="quiz-card">
+        <h3>2. Qual destes NÃO é um componente essencial de um agente de IA?</h3>
+        <button class="option" onclick="answer(this, false, 'feedback2')">Modelo de linguagem</button>
+        <button class="option" onclick="answer(this, false, 'feedback2')">Ferramentas/funções</button>
+        <button class="option" onclick="answer(this, true, 'feedback2')">Programação avançada do usuário</button>
+        <div id="feedback2" class="feedback"></div>
+      </div>
+
+      <div class="quiz-card">
+        <h3>3. No framework P-C-O-R-F, o que significa a letra "R"?</h3>
+        <button class="option" onclick="answer(this, false, 'feedback3')">Referências bibliográficas</button>
+        <button class="option" onclick="answer(this, true, 'feedback3')">Restrições</button>
+        <button class="option" onclick="answer(this, false, 'feedback3')">Resultado esperado</button>
+        <div id="feedback3" class="feedback"></div>
+      </div>
+
+      <div class="quiz-card">
+        <h3>4. Qual é o primeiro passo no ciclo de trabalho de um agente?</h3>
+        <button class="option" onclick="answer(this, true, 'feedback4')">Entender o pedido</button>
+        <button class="option" onclick="answer(this, false, 'feedback4')">Consultar fontes de dados</button>
+        <button class="option" onclick="answer(this, false, 'feedback4')">Entregar a resposta</button>
+        <div id="feedback4" class="feedback"></div>
+      </div>
+
+      <div class="quiz-card">
+        <h3>5. Qual é a recomendação mais importante ao usar IA no trabalho?</h3>
+        <button class="option" onclick="answer(this, false, 'feedback5')">Confiar cegamente em todas as respostas</button>
+        <button class="option" onclick="answer(this, true, 'feedback5')">Validar informações importantes em fontes oficiais</button>
+        <button class="option" onclick="answer(this, false, 'feedback5')">Evitar completamente o uso de dados corporativos</button>
+        <div id="feedback5" class="feedback"></div>
+      </div>
+    </section>
+
+    <section id="checklist" class="panel checklist">
+      <h2>Checklist: Antes de usar IA no trabalho</h2>
+      <p>Marque os pontos que você já considera no seu dia a dia. Esta é uma boa prática para usar IA de forma responsável.</p>
+      <label onclick="toggleCheck(this)"><input type="checkbox" /> Eu sei qual problema quero resolver, antes de escolher a ferramenta.</label>
+      <label onclick="toggleCheck(this)"><input type="checkbox" /> Eu verifico se posso usar os dados ou documentos envolvidos.</label>
+      <label onclick="toggleCheck(this)"><input type="checkbox" /> Eu confiro respostas importantes em fontes oficiais.</label>
+      <label onclick="toggleCheck(this)"><input type="checkbox" /> Eu evito compartilhar dados sensíveis sem autorização.</label>
+      <label onclick="toggleCheck(this)"><input type="checkbox" /> Eu uso IA para potencializar meu trabalho, não para abrir mão do pensamento crítico.</label>
+      <label onclick="toggleCheck(this)"><input type="checkbox" /> Eu defino claramente o papel, contexto e objetivo antes de fazer um prompt.</label>
+      <label onclick="toggleCheck(this)"><input type="checkbox" /> Eu itero e refino minhas solicitações com base nas respostas recebidas.</label>
+      <label onclick="toggleCheck(this)"><input type="checkbox" /> Eu mantenho um tom profissional e reviso o conteúdo gerado antes de compartilhar.</label>
+    </section>
+
+    <section class="panel">
+      <h2>Mensagem Final</h2>
+      <p>
+        Agentes de IA representam uma nova forma de trabalhar: mais conversacional, mais conectada e mais orientada a objetivos.
+        Mas o diferencial continua sendo <strong>humano</strong>: curiosidade, ética, contexto, criatividade e responsabilidade.
+      </p>
+      <p class="highlight">A pergunta não é apenas "o que a IA consegue fazer?". A pergunta mais poderosa é: <em>"como podemos usar IA para tomar decisões melhores, juntos?"</em></p>
+      <div style="text-align: center; margin-top: 28px;">
+        <button class="btn" onclick="scrollToSection('intro')">Revisar pílula</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Pílula de Conhecimento • Programa JEDAI • Primeiros Passos com Agentes de IA
+    </footer>
+  </div>
+
+  <script>
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function answer(button, isCorrect, feedbackId) {
+      const quizCard = button.closest('.quiz-card');
+      const options = quizCard.querySelectorAll('.option');
+      const feedback = document.getElementById(feedbackId);
+      
+      options.forEach(opt => {
+        opt.classList.remove('correct', 'wrong');
+        opt.disabled = true;
+      });
+      
+      button.classList.add(isCorrect ? 'correct' : 'wrong');
+      
+      const messages = {
+        'feedback1': {
+          correct: 'Correto! Um agente combina raciocínio, contexto, ferramentas e ação controlada.',
+          wrong: 'Quase! O ponto central é que o agente pode planejar, consultar ferramentas e agir com controle.'
+        },
+        'feedback2': {
+          correct: 'Correto! O usuário não precisa saber programar para usar um agente de IA.',
+          wrong: 'Os componentes essenciais são: modelo de linguagem, ferramentas e contexto. A programação avançada do usuário não é necessária.'
+        },
+        'feedback3': {
+          correct: 'Correto! R = Restrições (o que deve ser evitado).',
+          wrong: 'No framework P-C-O-R-F, R significa Restrições.'
+        },
+        'feedback4': {
+          correct: 'Correto! O primeiro passo é entender o pedido (intenção, contexto, restrições).',
+          wrong: 'O ciclo começa com "Entende", antes de consultar fontes ou entregar respostas.'
+        },
+        'feedback5': {
+          correct: 'Correto! Sempre valide informações importantes em fontes oficiais antes de tomar decisões.',
+          wrong: 'A recomendação principal é sempre validar informações importantes em fontes oficiais.'
+        }
+      };
+      
+      feedback.textContent = isCorrect ? messages[feedbackId].correct : messages[feedbackId].wrong;
+    }
+
+    function toggleCheck(label) {
+      const checkbox = label.querySelector('input[type="checkbox"]');
+      checkbox.checked = !checkbox.checked;
+      if (checkbox.checked) {
+        label.classList.add('checked');
+      } else {
+        label.classList.remove('checked');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,5 +1,1 @@
-# Ignore everything except the HTML file
-*
-!index.html
-!netlify.toml
-!.gitignore
+# Não ignorar nada - todos os arquivos são necessários

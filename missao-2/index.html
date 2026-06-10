@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Missão 2 | Indique os Cursos - HUB de Dados</title>
+  <style>
+    :root {
+      --bg: #08111f;
+      --card: #101c2f;
+      --card-2: #15243a;
+      --text: #ecf6ff;
+      --muted: #a9bbcf;
+      --cyan: #00e5ff;
+      --purple: #9b5cff;
+      --green: #7dffb2;
+      --yellow: #ffd166;
+      --danger: #ff6b6b;
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(0,229,255,.22), transparent 30%),
+        radial-gradient(circle at top right, rgba(155,92,255,.22), transparent 32%),
+        linear-gradient(135deg, #060b14, var(--bg));
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 34px 20px 80px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      transition: .2s ease;
+      margin-bottom: 20px;
+    }
+
+    .back-link:hover {
+      background: rgba(0,229,255,.12);
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: rgba(155,92,255,.1);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(80px);
+      z-index: -1;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(0,229,255,.12);
+      color: var(--cyan);
+      border: 1px solid rgba(0,229,255,.28);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    h1 {
+      font-size: clamp(34px, 6vw, 56px);
+      line-height: 1.05;
+      margin: 24px 0 16px;
+      letter-spacing: -0.03em;
+    }
+
+    h2 {
+      font-size: clamp(24px, 4vw, 36px);
+      margin: 0 0 14px;
+      letter-spacing: -0.02em;
+    }
+
+    h3 { margin: 0 0 10px; font-size: 22px; }
+
+    p { margin: 0 0 14px; color: var(--muted); }
+
+    .accent { color: var(--cyan); }
+    .highlight { color: var(--text); font-weight: 600; }
+
+    .intro {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      font-size: 18px;
+    }
+
+    .courses {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 28px;
+      margin: 40px 0;
+    }
+
+    .course-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 60px rgba(0,0,0,.45);
+      border-color: rgba(0,229,255,.3);
+    }
+
+    .course-icon {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(0,229,255,.2), rgba(155,92,255,.2));
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .course-card h3 {
+      color: var(--text);
+    }
+
+    .importance-box {
+      background: rgba(0,229,255,.08);
+      border: 1px solid rgba(0,229,255,.2);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+
+    .importance-box strong {
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .importance-box p {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .course-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: auto;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(0,229,255,.25), rgba(155,92,255,.25));
+      border: 1px solid rgba(0,229,255,.4);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: .2s ease;
+      text-decoration: none;
+    }
+
+    .course-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,229,255,.2);
+      text-decoration: none;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      padding: 32px;
+      margin: 40px 0;
+    }
+
+    .quiz-card {
+      padding: 24px;
+      margin-top: 20px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 18px;
+    }
+
+    .quiz-card h4 {
+      margin: 0 0 16px;
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    .option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      margin: 10px 0;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.11);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor: pointer;
+      transition: .15s ease;
+      font-size: 15px;
+    }
+
+    .option:hover { background: rgba(0,229,255,.13); }
+    .option.correct { border-color: rgba(125,255,178,.8); background: rgba(125,255,178,.15); }
+    .option.wrong { border-color: rgba(255,107,107,.8); background: rgba(255,107,107,.14); }
+
+    .feedback {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      min-height: 44px;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.correct { background: rgba(125,255,178,.1); color: var(--green); border: 1px solid rgba(125,255,178,.3); }
+    .feedback.wrong { background: rgba(255,107,107,.1); color: var(--danger); border: 1px solid rgba(255,107,107,.3); }
+    .feedback.info { background: rgba(0,229,255,.1); color: var(--cyan); border: 1px solid rgba(0,229,255,.3); }
+
+    .key-points {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .key-point {
+      padding: 20px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.11);
+    }
+
+    .key-point strong {
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .cta-section {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 36px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: var(--bg);
+      font-weight: 800;
+      font-size: 18px;
+      text-decoration: none;
+      transition: .2s ease;
+      margin: 8px;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0,229,255,.3);
+      text-decoration: none;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .courses { grid-template-columns: 1fr; }
+      .key-points { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="../" class="back-link">← Voltar para o Hub</a>
+
+    <header class="hero">
+      <span class="tag">Missão 2 • Indique os Cursos</span>
+      <h1>Capacite-se com os Cursos do <span class="accent">HUB de Dados</span></h1>
+      <p class="intro">
+        A Inteligência Artificial está transformando a forma como trabalhamos. 
+        Estes dois cursos fundamentais vão preparar você para usar IA de forma 
+        <strong class="highlight">responsável, ética e produtiva</strong> no ambiente corporativo.
+      </p>
+    </header>
+
+    <section class="courses">
+      <!-- Curso 1: Ética -->
+      <div class="course-card">
+        <div class="course-icon">🛡️</div>
+        <h3>Ética, Compliance e Adoção da IA Generativa</h3>
+        <p>
+          Entenda os princípios éticos fundamentais para o uso responsável da IA Generativa 
+          em ambientes corporativos. Aprenda sobre compliance, riscos e boas práticas.
+        </p>
+        
+        <div class="importance-box">
+          <strong>💡 Por que fazer este curso?</strong>
+          <p>
+            Antes de usar qualquer ferramenta de IA, é essencial entender os limites éticos 
+            e legais. Este curso te prepara para tomar decisões conscientes e proteger 
+            dados sensíveis, evitando problemas de compliance.
+          </p>
+        </div>
+
+        <div class="key-points">
+          <div class="key-point">
+            <strong>Princípios éticos</strong>
+            <span style="color: var(--muted); font-size: 14px;">Transparência, responsabilidade e justiça</span>
+          </div>
+          <div class="key-point">
+            <strong>Proteção de dados</strong>
+            <span style="color: var(--muted); font-size: 14px;">LGPD e segurança da informação</span>
+          </div>
+          <div class="key-point">
+            <strong>Riscos da IA</strong>
+            <span style="color: var(--muted); font-size: 14px;">Viés, privacidade e desinformação</span>
+          </div>
+        </div>
+
+        <a href="https://unit.edusense.app/#/player/3749?lesson_id=43529" target="_blank" class="course-link">
+          Acessar curso de Ética →
+        </a>
+      </div>
+
+      <!-- Curso 2: Agentes de IA -->
+      <div class="course-card">
+        <div class="course-icon">🤖</div>
+        <h3>Inteligência Artificial - Primeiros passos com Agentes de IA</h3>
+        <p>
+          Descubra como agentes de IA podem automatizar tarefas, aumentar produtividade 
+          e apoiar decisões. Aprenda na prática como construir prompts eficientes.
+        </p>
+        
+        <div class="importance-box">
+          <strong>💡 Por que fazer este curso?</strong>
+          <p>
+            Agentes de IA são ferramentas poderosas para o dia a dia. Este curso te ensina 
+            a usar essa tecnologia de forma prática, aumentando sua produtividade sem 
+            perder o controle humano sobre as decisões.
+          </p>
+        </div>
+
+        <div class="key-points">
+          <div class="key-point">
+            <strong>O que são agentes</strong>
+            <span style="color: var(--muted); font-size: 14px;">Conceitos e arquitetura</span>
+          </div>
+          <div class="key-point">
+            <strong>Prompts eficientes</strong>
+            <span style="color: var(--muted); font-size: 14px;">Técnicas de engenharia de prompt</span>
+          </div>
+          <div class="key-point">
+            <strong>Casos práticos</strong>
+            <span style="color: var(--muted); font-size: 14px;">Aplicações reais no trabalho</span>
+          </div>
+        </div>
+
+        <a href="https://unit.edusense.app/#/player/3427?lesson_id=41763" target="_blank" class="course-link">
+          Acessar curso de Agentes →
+        </a>
+      </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section class="panel">
+      <h2>🧠 Quiz: Teste seus conhecimentos</h2>
+      <p>Antes de começar os cursos, veja o que você já sabe sobre IA e Ética. 
+      Responda e receba feedback imediato!</p>
+
+      <!-- Pergunta 1 -->
+      <div class="quiz-card">
+        <h4>1. Qual é o primeiro passo antes de usar IA Generativa em projetos corporativos?</h4>
+        <button class="option" onclick="answer(this, false, 'f1')">Começar a usar imediatamente para ganhar produtividade</button>
+        <button class="option" onclick="answer(this, true, 'f1')">Entender os princípios éticos e limites de compliance</button>
+        <button class="option" onclick="answer(this, false, 'f1')">Compartilhar todos os dados da empresa com a IA</button>
+        <div id="f1" class="feedback">
+          <strong>Resposta correta:</strong> Entender ética e compliance é fundamental antes de qualquer uso de IA corporativa. Isso protege a empresa e os dados dos clientes.
+        </div>
+      </div>
+
+      <!-- Pergunta 2 -->
+      <div class="quiz-card">
+        <h4>2. O que é um "agente de IA"?</h4>
+        <button class="option" onclick="answer(this, false, 'f2')">Um robô físico que trabalha no escritório</button>
+        <button class="option" onclick="answer(this, true, 'f2')">Um sistema que usa IA para interpretar tarefas, consultar dados e executar ações</button>
+        <button class="option" onclick="answer(this, false, 'f2')">Um programa que substitui completamente os humanos</button>
+        <div id="f2" class="feedback">
+          <strong>Resposta correta:</strong> Agentes de IA são sistemas inteligentes que combinam modelos de linguagem com ferramentas para realizar tarefas complexas, sempre com supervisão humana.
+        </div>
+      </div>
+
+      <!-- Pergunta 3 -->
+      <div class="quiz-card">
+        <h4>3. Qual risco NÃO está associado ao uso inadequado de IA Generativa?</h4>
+        <button class="option" onclick="answer(this, false, 'f3')">Vazamento de dados sensíveis</button>
+        <button class="option" onclick="answer(this, false, 'f3')">Geração de informações incorretas (alucinações)</button>
+        <button class="option" onclick="answer(this, true, 'f3')">Aumento automático da empatia humana</button>
+        <div id="f3" class="feedback">
+          <strong>Resposta correta:</strong> A IA não aumenta a empatia humana - na verdade, o uso excessivo pode diminuir a interação humana. Os riscos reais incluem vazamento de dados e informações incorretas.
+        </div>
+      </div>
+
+      <!-- Pergunta 4 -->
+      <div class="quiz-card">
+        <h4>4. O que é "engenharia de prompt"?</h4>
+        <button class="option" onclick="answer(this, true, 'f4')">A técnica de formular instruções claras para obter melhores respostas da IA</button>
+        <button class="option" onclick="answer(this, false, 'f4')">A construção física de computadores quânticos</button>
+        <button class="option" onclick="answer(this, false, 'f4')">Um tipo de hacker que invade sistemas de IA</button>
+        <div id="f4" class="feedback">
+          <strong>Resposta correta:</strong> Engenharia de prompt é a habilidade de escrever instruções eficientes para IAs, definindo contexto, objetivo e formato esperado.
+        </div>
+      </div>
+
+      <!-- Pergunta 5 -->
+      <div class="quiz-card">
+        <h4>5. Por que a LGPD é importante ao usar IA?</h4>
+        <button class="option" onclick="answer(this, false, 'f5')">Porque impede completamente o uso de IA no Brasil</button>
+        <button class="option" onclick="answer(this, true, 'f5')">Porque estabelece regras para proteger dados pessoais e evitar multas</button>
+        <button class="option" onclick="answer(this, false, 'f5')">Porque só se aplica a empresas de tecnologia</button>
+        <div id="f5" class="feedback">
+          <strong>Resposta correta:</strong> A LGPD (Lei Geral de Proteção de Dados) protege informações pessoais e estabelece obrigações para todas as empresas, com multas significativas em caso de descumprimento.
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <h2>🚀 Pronto para começar?</h2>
+      <p style="max-width: 600px; margin: 0 auto 30px;">
+        Agora que você conhece a importância desses cursos, clique abaixo para acessá-los 
+        diretamente na plataforma de treinamento.
+      </p>
+      
+      <a href="https://unit.edusense.app/#/player/3749?lesson_id=43529" target="_blank" class="cta-button">
+        🛡️ Curso de Ética
+      </a>
+      <a href="https://unit.edusense.app/#/player/3427?lesson_id=41763" target="_blank" class="cta-button">
+        🤖 Curso de Agentes
+      </a>
+
+      <p style="margin-top: 30px; font-size: 15px; color: var(--muted);">
+        💡 <strong>Dica:</strong> Comece pelo curso de Ética para fundamentar seus conhecimentos, 
+        depois avance para Agentes de IA.
+      </p>
+    </section>
+
+    <footer class="footer">
+      <p>Missão 2 • Indique os Cursos • Programa JEDAI</p>
+      <p style="font-size: 14px; margin-top: 8px;">
+        <a href="../">← Voltar para o Hub de Missões</a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    function answer(button, isCorrect, feedbackId) {
+      const quizCard = button.closest('.quiz-card');
+      const options = quizCard.querySelectorAll('.option');
+      const feedback = document.getElementById(feedbackId);
+      
+      options.forEach(opt => {
+        opt.classList.remove('correct', 'wrong');
+        opt.disabled = true;
+      });
+      
+      button.classList.add(isCorrect ? 'correct' : 'wrong');
+      
+      if (isCorrect) {
+        feedback.className = 'feedback show correct';
+        feedback.innerHTML = '<strong>✓ Correto!</strong> ' + feedback.innerHTML.replace('<strong>Resposta correta:</strong>', '');
+      } else {
+        feedback.className = 'feedback show info';
+        feedback.innerHTML = '<strong>✗ Quase!</strong> ' + feedback.innerHTML;
+      }
+    }
+  </script>
+</body>
+</html>

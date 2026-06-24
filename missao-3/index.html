@@ -83,38 +83,32 @@
 
     /* ── Hero ── */
     .hero {
-      position: relative;
-      min-height: 88vh;
+      background: linear-gradient(135deg, #060b14 0%, #08111f 60%, #0d1a2e 100%);
+      padding: 80px 0;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
       display: flex;
       align-items: center;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('https://drive.google.com/thumbnail?id=16vNUHMBQrA9VrfLaPYsh7qHzJSknc5P8&sz=w1400');
-      background-size: cover;
-      background-position: center top;
-      filter: brightness(.35) saturate(1.2);
-      z-index: 0;
-    }
-
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg,
-        rgba(8,17,31,.82) 0%,
-        rgba(8,17,31,.55) 60%,
-        rgba(8,17,31,.75) 100%);
-      z-index: 1;
+      gap: 56px;
     }
 
     .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 700px;
-      padding: 80px 40px 80px 60px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hero-image {
+      flex: 0 0 440px;
+    }
+
+    .hero-image img {
+      width: 100%;
+      border-radius: 18px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.55);
     }
 
     .tag {
@@ -441,43 +435,6 @@
       border: 1px solid rgba(255,209,102,.3);
     }
 
-    /* ── Mensagem pronta ── */
-    .msg-box {
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 36px;
-    }
-
-    .msg-text {
-      background: rgba(0,229,255,.05);
-      border: 1px solid rgba(0,229,255,.15);
-      border-radius: 14px;
-      padding: 24px 26px;
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.75;
-      margin: 20px 0 24px;
-      white-space: pre-line;
-    }
-
-    .copy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      border-radius: 999px;
-      background: rgba(0,229,255,.15);
-      border: 1px solid rgba(0,229,255,.35);
-      color: var(--cyan);
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      transition: .2s ease;
-    }
-
-    .copy-btn:hover { background: rgba(0,229,255,.28); }
-    .copy-btn.copied { color: var(--green); border-color: rgba(125,255,178,.4); background: rgba(125,255,178,.1); }
 
     /* ── Fechamento ── */
     .closing {
@@ -510,7 +467,9 @@
 
     /* ── Mobile ── */
     @media (max-width: 768px) {
-      .hero-content { padding: 60px 24px; }
+      .hero-inner { flex-direction: column; gap: 32px; }
+      .hero-image { flex: none; width: 100%; }
+      .hero-content { padding: 0; }
       .navbar-links { display: none; }
       .audience-wrapper { flex-direction: column; }
       .audience-divider { padding: 16px 0; }
@@ -531,33 +490,34 @@
         <li><a href="#a-jornada">A jornada</a></li>
         <li><a href="#para-quem-e">Para quem é</a></li>
         <li><a href="#quiz">Quiz</a></li>
-        <li><a href="#mensagem-pronta">Mensagem pronta</a></li>
       </ul>
     </div>
   </nav>
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <div class="tag">Missão JEDAI • Inscrições Abertas</div>
-      <h1>Quer fazer parte da comunidade <span class="accent">JEDAI?</span></h1>
-      <p class="hero-text">
-        As inscrições para o <strong>Programa JEDAI — 2º semestre de 2026</strong> estão abertas.
-        Esta é uma oportunidade para quem quer aprender, compartilhar conhecimento e fortalecer
-        a cultura de dados, IA e inovação dentro da TOTVS.
-      </p>
-      <p class="hero-text">
-        Mais do que um programa, o JEDAI é uma jornada de multiplicadores: pessoas que aprendem,
-        experimentam, conectam áreas e ajudam outras pessoas a evoluir junto.
-      </p>
-      <div class="hero-actions">
-        <a href="https://tdw.totvs.com/corporativo/programa-jedai-inscricoes-abertas-para-o-2-semestre-de-2026/" target="_blank" class="btn-primary">
-          Ver publicação oficial
-        </a>
-        <a href="#quiz" class="btn-outline">Fazer quiz rápido</a>
-        <a href="#mensagem-pronta" class="btn-outline">Mensagem pronta</a>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="tag">Missão JEDAI • Inscrições Abertas</div>
+        <h1>Quer fazer parte da comunidade <span class="accent">JEDAI?</span></h1>
+        <p class="hero-text">
+          As inscrições para o <strong>Programa JEDAI — 2º semestre de 2026</strong> estão abertas.
+          Esta é uma oportunidade para quem quer aprender, compartilhar conhecimento e fortalecer
+          a cultura de dados, IA e inovação dentro da TOTVS.
+        </p>
+        <p class="hero-text">
+          Mais do que um programa, o JEDAI é uma jornada de multiplicadores: pessoas que aprendem,
+          experimentam, conectam áreas e ajudam outras pessoas a evoluir junto.
+        </p>
+        <div class="hero-actions">
+          <a href="https://tdw.totvs.com/corporativo/programa-jedai-inscricoes-abertas-para-o-2-semestre-de-2026/" target="_blank" class="btn-primary">
+            Ver publicação oficial
+          </a>
+          <a href="#quiz" class="btn-outline">Fazer quiz rápido</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://drive.google.com/thumbnail?id=16vNUHMBQrA9VrfLaPYsh7qHzJSknc5P8&sz=w800" alt="Programa JEDAI — inscrições abertas 2º semestre 2026" loading="lazy" />
       </div>
     </div>
   </section>
@@ -706,31 +666,6 @@
 
   <hr class="section-divider" />
 
-  <!-- Mensagem pronta -->
-  <section id="mensagem-pronta">
-    <div class="wrap">
-      <h2 class="section-title">Mensagem pronta</h2>
-      <p class="section-sub">Copie o texto abaixo, personalize se quiser, e compartilhe com seu time ou grupo.</p>
-
-      <div class="msg-box">
-        <p style="color:var(--muted); font-size:14px; margin-bottom:4px;">Sugestão de texto para compartilhamento:</p>
-        <div class="msg-text" id="msgText">Sabia que as inscrições do Programa JEDAI para o 2º semestre de 2026 estão abertas? 🚀
-
-O JEDAI é uma jornada de multiplicadores de conhecimento aqui na TOTVS — uma oportunidade para quem quer aprender sobre dados, IA e inovação e ajudar a construir uma cultura mais colaborativa.
-
-Não é preciso ser especialista: o ponto de partida é a curiosidade!
-
-🔗 Confira as informações e se inscreva:
-https://tdw.totvs.com/corporativo/programa-jedai-inscricoes-abertas-para-o-2-semestre-de-2026/</div>
-        <button class="copy-btn" id="copyMsgBtn" onclick="copyMsg()">
-          📋 Copiar mensagem
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <hr class="section-divider" />
-
   <!-- Fechamento -->
   <section>
     <div class="wrap">
@@ -763,18 +698,6 @@ https://tdw.totvs.com/corporativo/programa-jedai-inscricoes-abertas-para-o-2-sem
       fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'info');
     }
 
-    function copyMsg() {
-      const text = document.getElementById('msgText').innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById('copyMsgBtn');
-        btn.textContent = '✓ Copiado!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = '📋 Copiar mensagem';
-          btn.classList.remove('copied');
-        }, 2800);
-      });
-    }
   </script>
 </body>
 </html>
